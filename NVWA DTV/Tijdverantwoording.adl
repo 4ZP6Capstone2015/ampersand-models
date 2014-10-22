@@ -14,6 +14,11 @@ INCLUDE "PopForTesting.adl"
 
 THEMES Dagverantwoordingen, Autorisaties, Rechten, Medewerkers, Tijdvakken, Betaalperiodes, Persoonsinformatie, Roosters
 
+INTERFACE PeriodeBegin : V[ONE*Periode]
+BOX [ periode : I[Periode]
+    , begin : begin
+    ]
+
 PURPOSE CONTEXT DTV
 {+De werktijdenregeling Nederlandse Voedsel- en Warenautoriteit (hierna: WTR)
 stelt een applicatie voor het tijdschrijven beschikbaar voor alle medewerkers,
