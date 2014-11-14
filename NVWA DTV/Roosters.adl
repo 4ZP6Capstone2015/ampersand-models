@@ -29,7 +29,9 @@ INTERFACE "Werkrooster inregelen"
         , datum[Dagverantwoording*Datum]
         , medewerkerD
         )
-        FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+--      FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+    : V[ONE*SESSION];'_SESSION';(sessionRole;'Medewerker';V /\ sessionUser)
+
 BOX [ "Rooster van : " : I[Persoon]
     , "" : medewerkerD~     -- Dagverantwoording
       BOX [ Datum : datum[Dagverantwoording*Datum]
@@ -43,7 +45,8 @@ BOX [ "Rooster van : " : I[Persoon]
 
 {-
 INTERFACE "Werkrooster bekijken"
-          FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+--        FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+    : V[ONE*SESSION];'_SESSION';(sessionRole;'Medewerker';V /\ sessionUser)
 BOX [ "Rooster van : " : I[Persoon]
     , "" : medewerkerD~;dag~  --Dienst
       BOX ["Datum" :       dag;datum[Dagverantwoording*Datum]
@@ -55,7 +58,8 @@ BOX [ "Rooster van : " : I[Persoon]
 -}
 
 INTERFACE "Werkrooster bekijken"
-          FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+--        FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+    : V[ONE*SESSION];'_SESSION';(sessionRole;'Medewerker';V /\ sessionUser)
 BOX [ "Rooster van : " : I[Persoon]
     , "" : medewerkerD~     -- Dagverantwoording
       BOX [ Datum : datum[Dagverantwoording*Datum]

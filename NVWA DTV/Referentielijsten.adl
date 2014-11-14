@@ -6,7 +6,8 @@ INTERFACE "Beheer Referentielijsten"
  ( refLijstPcodes, pCodeRubriek, pCodeRubriek, invoer, opmerking
  , refLijstActiviteiten, activiteitNaam, cat
  , refLijstRoostersoorten,refLijstCategorieën,refLijstUrenpools,refLijstRechtOpToelage, grond, refLijstMedewerkerWerktijdenpakket)
- FOR FAB : I[ONE]
+-- FOR FAB : I[ONE]
+  : V[ONE*SESSION];'_SESSION';sessionRole;'FAB';V[Rol*ONE]
 BOX [ Activiteiten : V[ONE*Referentielijst];'Activiteiten'
       BOX [ "" : refLijstActiviteiten
                  BOX [ "" : activiteitNaam , categorie : cat ]

@@ -1,5 +1,5 @@
 CONTEXT DTV IN DUTCH
---INCLUDE "Login.adl"
+INCLUDE "Login.adl"
 --INCLUDE "Berichten.adl"
 --INCLUDE "TijdvakResultaten.adl"
 --INCLUDE "ToelageBerekeningen.adl"
@@ -51,7 +51,9 @@ BOX [ indiener : medewerkerD
 VIEW Tijdregistratie : Tijdregistratie (TXT "activiteit \"", activiteit, TXT " op tijdstip ", begin[Periode*DatumTijd], TXT "\"")
 VIEW Dienst : Dienst (TXT "Dienst \"", roosterSoort, TXT " op ", dag;datum, TXT "\"")
 
-INTERFACE "Bereken onregelmatige tijden" FOR Leidinggevende : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~;leidinggevende~
+INTERFACE "Bereken onregelmatige tijden" 
+-- FOR Leidinggevende : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~;leidinggevende~
+    : V[ONE*SESSION];'_SESSION';(sessionRole;'Leidinggevende';V /\ sessionUser;leidinggevende~)
 BOX [ "Medewerker : " : I[Persoon]
     , "" : medewerkerPer~   --Periodeverantwoording
       BOX[ "Verantwoordingsperiode : " : verantwoordingsperiode
@@ -76,7 +78,9 @@ INTERFACE "Bereken Art17 per verantwoordingsperiode"
         , periodeverantwoordingVasteToelageArt17lid4
         , periodeverantwoordingVasteToelageArt17lid7
         , periodeverantwoordingToelageVoorafgaande36Kalendermaanden
-        ) FOR Leidinggevende : I[Periodeverantwoording]
+        ) -- FOR Leidinggevende : I[Periodeverantwoording]
+    : I[Periodeverantwoording] /\ V;'_SESSION'[SESSION];sessionRole;'Leidinggevende';V
+
     BOX[ "Medewerker" : medewerkerPer
        , "Verantwoordingsperiode : " : verantwoordingsperiode  
        , "Geboortedatum : " : medewerkerPer;geboortedatum
@@ -98,14 +102,16 @@ INTERFACE "Bereken Art17 per verantwoordingsperiode"
        ] 
 -}
 
---INTERFACE "Nieuwe periodeverantwoording" FOR Leidinggevende : I[Periodeverantwoording]
+--INTERFACE "Nieuwe periodeverantwoording" -- FOR Leidinggevende : I[Periodeverantwoording]
+--    : I[Periodeverantwoording] /\ V;'_SESSION'[SESSION];sessionRole;'Leidinggevende';V
 --BOX ["Voor medewerker : " : medewerkerPer
 --    ,"Voor verantwoordingsperiode : " : verantwoordingsperiode
 --    ]
 
 
 INTERFACE "Geaccordeerde tijdregistraties"
-FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+-- FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+    : V[ONE*SESSION];'_SESSION';(sessionRole;'Medewerker';V /\ sessionUser)
 BOX ["Tijdregistraties van " : I[Persoon]
     , "" : medewerkerD~/\V;'Akkoord';dagverantwoordingStatus~   -- Dagverantwoording
       BOX [ ingediend :          ontvangen
@@ -137,7 +143,8 @@ INTERFACE "Retour"
            , project
            , kostenplaats
            , toelichting
-           ) FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+           ) -- FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~
+    : V[ONE*SESSION];'_SESSION';(sessionRole;'Medewerker';V /\ sessionUser)
 BOX ["Tijdregistraties van " : I[Persoon]
     , "" : medewerkerD~/\V;'Retour';dagverantwoordingStatus~   -- Dagverantwoording
       BOX [ ingediend :          ontvangen
@@ -177,7 +184,8 @@ INTERFACE "Nieuwe Dagverantwoording"
            , roosterSoort[Dienst*Roostersoort]
            , begin[Periode*DatumTijd]
            , eind[Periode*DatumTijd]
-           ) FOR Medewerker : I[Dagverantwoording]
+           ) -- FOR Medewerker : I[Dagverantwoording]
+    : I[Dagverantwoording] /\ V;'_SESSION'[SESSION];sessionRole;'Medewerker';V
 BOX [ "datum invoer" :    ontvangen -- automatisch invullen
     , "Medewerker" :   medewerkerD  -- automatisch invullen
     , "betreft datum" :    datum    -- door gebruiker laten invullen
@@ -200,7 +208,8 @@ BOX [ "datum invoer" :    ontvangen -- automatisch invullen
 
 INTERFACE "Mijn Dagverantwoordingen"
            ( medewerkerD
-           ) FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~ --I[Dagverantwoording]
+           ) -- FOR Medewerker : V[ONE*SESSION];'_SESSION';sessionUsername;emailadres~ --I[Dagverantwoording]
+    : V[ONE*SESSION];'_SESSION';(sessionRole;'Medewerker';V /\ sessionUser)
 BOX ["Dagverantwoording : " : medewerkerD~  -- Dagverantwoording
     ]
 

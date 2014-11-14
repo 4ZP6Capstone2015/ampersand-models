@@ -47,4 +47,13 @@ PURPOSE RELATION functieschaalEinddatum[Salarisschaal*DatumTijd]  REF ""
 -}
 ENDPATTERN
 
+INTERFACE "Medewerkersgegevens" : I[Persoon]
+BOX[ "Naam" : I
+   , "Personeelsnummer" : personeelsnummer
+   , "Functie" : functie
+   , "Leidinggevende" : leidinggevende
+   , "Salarisschaal" : salarisschaal
+   , "Urenpool" : persoonUrenpool
+   ]
+
 ENDCONTEXT

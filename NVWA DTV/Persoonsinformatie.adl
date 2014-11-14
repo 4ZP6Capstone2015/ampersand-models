@@ -31,6 +31,18 @@ MEANING "Het emailadres van een persoon wordt geregistreerd."
 
 ENDPATTERN
 
+INTERFACE "Persoonsgegevens" : I[Persoon]
+BOX[ "Naam" : I
+   , "Voornaam" : voornaam
+   , "Tussenvoegsel" : tussenvoegsel
+   , "Achternaam" : achternaam
+   , "Initialen" : initialen
+   , "Titel" : titel
+   , "Geboortedatum" : geboortedatum
+   , "Telefoon" : telefoon
+   , "Emailadres" : emailadres
+   ]
+
 POPULATION initialen[Persoon*Initialen]               CONTAINS [ ("p3", "B.S.")]
 POPULATION geboortedatum[Persoon*Datum]               CONTAINS [ ("p3", "8 juni 1960")]
 
