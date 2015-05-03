@@ -17,7 +17,6 @@ VIOLATION (SRC idmSoort, TXT " ", SRC idmNummer, TXT " heeft meerdere houders: "
 
 idmUserid :: Identificatiemiddel * Userid [UNI]
 idmPassword :: Identificatiemiddel * "Password" [UNI]
-REPRESENT "Passowrd" TYPE Numeric
 
 RULE "Identificatie dmv U/PWs": idmUserid;idmUserid~ /\ idmPassword;idmPassword~ /\ idmSoort;idmSoort~ |- I[Identificatiemiddel]
 MEANING "De combinatie van gebruikersnaam en wachtwoord moet per soort identificatiemiddel identificerend zijn"

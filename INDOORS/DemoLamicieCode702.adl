@@ -19,9 +19,9 @@ PROCESS "Verwerken appelakte"
 ROLE Rechter MAINTAINS vonnismotivatie, vonnisbeslissing
 ROLE "Juridisch medewerker" MAINTAINS vonnismotivatie 
 
-dossiervrijgeven :: Dossier * Boolean
-
-dossiercompleet :: Dossier * Boolean
+dossiervrijgeven :: Dossier * "Boolean"
+REPRESENT "Boolean" TYPE Boolean
+dossiercompleet :: Dossier * "Boolean"
 
 {-RULE compleetvoorvrijgeven : dossiervrijgeven;'Ja';dossiervrijgeven~ |- dossiercompleet;'Ja';dossiercompleet~
 MESSAGE "Het dossier moet compleet zijn voordat het is vrijgegeven."

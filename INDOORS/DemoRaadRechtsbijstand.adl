@@ -25,7 +25,8 @@ statusaanvraag :: Document * Statusaanvraag
 
 zaakidRvR :: ZaakidRvR * Zaakid
 
-doorgehaald :: Advocaatgegevens * Boolean
+doorgehaald :: Advocaatgegevens * "Boolean"
+REPRESENT "Boolean" TYPE Boolean
 
 financieelbelang :: ZaakidRvR * "Financieel belang"
 

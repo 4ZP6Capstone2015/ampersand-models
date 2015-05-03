@@ -42,7 +42,8 @@ INCLUDE "INDOORS.adl"
 ---------------------------------
 -- Nog over te zetten relaties --
 ---------------------------------
-beslissingvervolging :: Document * Boolean
+beslissingvervolging :: Document * "Boolean"
+REPRESENT "Boolean" TYPE Boolean
 
 knummer :: Zaakid * Knummer
 
