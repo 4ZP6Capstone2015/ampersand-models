@@ -16,7 +16,8 @@ MESSAGE "De combinatie van identificatiemiddel soort en serienummer moet uniek i
 VIOLATION (SRC idmSoort, TXT " ", SRC idmNummer, TXT " heeft meerdere houders: ", TGT idmDisplayName)
 
 idmUserid :: Identificatiemiddel * Userid [UNI]
-idmPassword :: Identificatiemiddel * Password [UNI]
+idmPassword :: Identificatiemiddel * "Password" [UNI]
+REPRESENT "Passowrd" TYPE Numeric
 
 RULE "Identificatie dmv U/PWs": idmUserid;idmUserid~ /\ idmPassword;idmPassword~ /\ idmSoort;idmSoort~ |- I[Identificatiemiddel]
 MEANING "De combinatie van gebruikersnaam en wachtwoord moet per soort identificatiemiddel identificerend zijn"
@@ -96,7 +97,7 @@ sessionUserid :: SESSION * Userid [UNI]
 PRAGMA "De gebruiker van " " is ingelogd onder "
 MEANING "Onder de 'sessionUserid' van een sessie verstaan we (de business identifier van) het account waarvan de eigenaar verantwoordelijk gehouden wordt voor al hetgeen er in die sessie gebeurt."
 
-sessionPassword :: SESSION * Password [UNI]
+sessionPassword :: SESSION * "Password" [UNI]
 PRAGMA "De gebruiker van " " heeft zich geauthenticeerd met behulp van "
 
 RULE "Login": '_SESSION'[SESSION];sessionUserid;idmUserid~ |- '_SESSION';sessionPassword;idmPassword~ --Dit is een '|-' ipv '=' omdat een wachtwoord niet uniek hoeft te zijn

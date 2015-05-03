@@ -15,8 +15,8 @@ MEANING "De identiteit van een aanvrager kan alleen zijn vastgesteld als het mid
 MESSAGE "Het identificatiemiddel is niet geregistreerd. Heeft u misschien een typefout gemaakt?"
 
 vogAanvragerUserid :: VOGAanvraag * Userid [UNI]
-vogAanvragerPassword :: VOGAanvraag * Password [UNI]
-
+vogAanvragerPassword :: VOGAanvraag * "Password" [UNI]
+REPRESENT "Password" TYPE Password
 RULE "Integriteit van identificatimiddel specificatie": 
 (  (vogAanvragerUserid;idmUserid~ /\ vogAanvragerPassword;idmPassword~);(I[Identificatiemiddel] /\ idmSoort;'DigiD';idmSoort~)
    ;idmHouder;gbaBSN~
@@ -70,10 +70,10 @@ ENDPATTERN
 -----------------------------------------------------------
 PATTERN "Gemeentelijke VOG zaken"
 
-KEY "VOG aanvragen door gemeentes": GemeentelijkeVOGZaak(gemeenteAanvraagnummer)
+IDENT "VOG aanvragen door gemeentes": GemeentelijkeVOGZaak(gemeenteAanvraagnummer)
 gemeenteAanvraagnummer :: GemeentelijkeVOGZaak -> GemeenteAanvraagnummer
 gemAmbtenaarUserid :: GemeentelijkeVOGZaak * Userid [UNI]
-gemAmbtenaarPassword :: GemeentelijkeVOGZaak * Password [UNI]
+gemAmbtenaarPassword :: GemeentelijkeVOGZaak * "Password" [UNI]
 
 RULE "Gemeentelijke VOG aanvraag integriteit": I[GemeentelijkeVOGZaak] |-
    gemeenteAanvraagnummer;gemeenteAanvraagnummer~
@@ -168,7 +168,7 @@ ENDPATTERN
 PATTERN "Aanvragen voor COVOG"
 
 covogZaakNummer :: VOGAanvraag * COVOGZaakNummer [UNI]
-KEY "VOGZaken": VOGAanvraag(covogZaakNummer)
+IDENT "VOGZaken": VOGAanvraag(covogZaakNummer)
 --RULE "VOG Zaaknummer integriteit": covogZaakNummer~;covogZaakNummer |- I[COVOGZaakNummer]  -- Injectiviteit
 --MEANING "COVOG kan met VOG Zaaknummers haar VOG zaken identificeren"
 --MESSAGE "Er bestaat al een VOG aanvraag met dit zaaknummer"
@@ -188,9 +188,9 @@ ENDPATTERN
 PATTERN "VOG aanvraag templates"
 
 orgVOGTemplateID :: VOGAanvraagOrganisatieTemplate -> OrgVOGTemplateID
-KEY "Organisatie VOG templates": VOGAanvraagOrganisatieTemplate(orgOrganisatie;hrOrganisatieNaam, TXT " : ", orgVOGTemplateID)
+VIEW "Organisatie VOG templates": VOGAanvraagOrganisatieTemplate(orgOrganisatie;hrOrganisatieNaam, TXT " : ", orgVOGTemplateID)
 organisatieUserid :: VOGAanvraagOrganisatieTemplate * Userid [UNI]
-organisatiePassword :: VOGAanvraagOrganisatieTemplate * Password [UNI]
+organisatiePassword :: VOGAanvraagOrganisatieTemplate * "Password" [UNI]
 
 RULE "Organisatie VOG Template integriteit": I[VOGAanvraagOrganisatieTemplate] |-
    orgVOGTemplateID;orgVOGTemplateID~
