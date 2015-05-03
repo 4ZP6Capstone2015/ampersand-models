@@ -260,7 +260,8 @@ PURPOSE RELATION hogerberoep[Zaakid*Zaakid] REF "Art. 404 Sv; Art. 332 Rv"
 -}
 
 -- tijdelijke relatie als "shortcut" om alle condities voor hoger beroep uit te werken
-hogerberoepmogelijk :: Zaakid * Boolean [UNI]
+hogerberoepmogelijk :: Zaakid * "Boolean" [UNI]
+REPRESENT "Boolean" TYPE Boolean
 {-PURPOSE RELATION hogerberoepmogelijk[Zaakid*Boolean] REF "Vb. 332 Rv en Art. 333 Rv"
 
 -}
