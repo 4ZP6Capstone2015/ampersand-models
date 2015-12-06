@@ -13,7 +13,7 @@ INTERFACE "Organisaties" FOR RDW : V[SESSION*Organisatie] BOX <SCOLS>
 INTERFACE "Moeder-Ids" FOR RDW : V[SESSION*Identiteit] --; -I[Beheerder] ;I[Identiteit]; -I[Rol]  
 BOX <SCOLS>
   [ "alle"  : I[Identiteit]
-  , "2" : -I[Beheerder] 
+  , "2" : I[Identiteit] /\ V[Identiteit*Identiteit]-I[Beheerder]
   , "3" : -I[Beheerder] ;I[Identiteit]
   , "4" : -I[Beheerder] ;I[Identiteit]; -I[Rol]
   , "Moeder-Id"  : I[Identiteit] LINKTO INTERFACE "Moeder-Id"
@@ -34,7 +34,7 @@ INTERFACE "Organisatie" (kvkNummer,nieuw) FOR RDW: I[Organisatie] CRUD ROWS
   ]
 RELATION nieuw [Organisatie*Organisatie][PROP]
 
-INTERFACE "Moeder-Id" (hoortBij, isBeheerd) : I[Identiteit];-I[Beheerder];I[Identiteit];-I[Rol]
+INTERFACE "Moeder-Id" (hoortBij, isBeheerd) : I[Identiteit] /\ (((V[Identiteit*Identiteit])-I[Beheerder])-I[Rol])
   ROWS [ "Beheerder / Rollen" : I[Identiteit] COLS
           [ "Identiteit"       : I[Identiteit]
           , "Organisatie"      : hoortBij 
@@ -65,7 +65,7 @@ INTERFACE "RollenBeheer" (aangemaaktDoor,nieuweRol) FOR Beheerder: I[Identiteit]
      ]
   ]
 RELATION nieuweRol[Identiteit*Identiteit][PROP]
-ROLE ExecEngine MAINTAINS "aanmaken nieuwe rol" 
+ROLE ExecEnginexxx MAINTAINS "aanmaken nieuwe rol" 
 RULE "aanmaken nieuwe rol" : I |- -nieuweRol
 VIOLATION ( TXT "NewStruct;Rol"
               , TXT ";aangemaaktDoor;Identiteit;_NEW;Identiteit;", SRC I

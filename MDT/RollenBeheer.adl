@@ -27,7 +27,7 @@ MEANING "Een beheerder wordt zelf niet beheerd."
 RULE "Elke beheerder beheert precies één identiteit." : (beheerderVan~;beheerderVan~) |- I[Identiteit]
 MEANING "Elke beheerder beheert precies één identiteit."
 
-ROLE ExecEngine MAINTAINS BeheerdersIdentiteitHoortBijZelfdeOrganisatie1
+ROLE ExecEnginezzz MAINTAINS BeheerdersIdentiteitHoortBijZelfdeOrganisatie1
 RULE BeheerdersIdentiteitHoortBijZelfdeOrganisatie1 : beheerderVan;hoortBij |- hoortBij
 MEANING "De beheerder van een identiteit hoort bij de organisatie die hoort bij de identiteit die hij beheert." 
 VIOLATION ( TXT "InsPair;hoortBij;Identiteit;", SRC I[Beheerder], TXT ";Organisatie;", TGT I )
@@ -116,7 +116,7 @@ MEANING "Een dienst kan alleen beschikbaar zijn voor een identiteit, als die ide
 
 
 
-ROLE ExecEngine MAINTAINS "toevoegen autorisatie", "verwijderen autorisatie"
+ROLE ExecEnginebbb MAINTAINS "toevoegen autorisatie", "verwijderen autorisatie"
 --RULE "toevoegen autorisatie" : ((I/\-(aangemaaktDoor;aangemaaktDoor~)));((zitIn;toegekend~ /\ -afwijking~) \/ toegekend~) |- geautoriseerd 
 RULE "toevoegen autorisatie" : (   (zitIn;toegekend~ /\ -afwijking~)
 --                                \/ (-(zitIn;toegekend~) /\ afwijking~)
@@ -152,7 +152,7 @@ VIOLATION ( TXT "DelPair;geautoriseerd;Identiteit;", SRC I[Identiteit], TXT ";Be
 RULE "beheerder heeft bevoegdheid rollenbeheerder" : I[Beheerder] |- toegekend[Bevoegdheid*Identiteit]~ ; I[Bevoegdheid]; '8888' ; toegekend[Bevoegdheid*Identiteit]
 MEANING "De bevoegdheid 'Beheren rollenpassen' is toegekend aan elke beheerder."
 VIOLATION ( TXT "InsPair;toegekend;Bevoegdheid;8888;Identiteit;", TGT I)
-ROLE ExecEngine MAINTAINS  "beheerder heeft bevoegdheid rollenbeheerder"
+ROLE ExecEngineaaa MAINTAINS  "beheerder heeft bevoegdheid rollenbeheerder"
 
 RULE "Rollenbeheer is voorbehouden aan beheerder" : '8888' ; toegekend[Bevoegdheid*Identiteit] |- toegekend[Bevoegdheid*Identiteit]; I[Beheerder]
 MEANING "De bevoegdheid 'Beheren rollenpassen' is voorbehouden aan de beheerder (van de organisatie)."
