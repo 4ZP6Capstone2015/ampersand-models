@@ -1,0 +1,7 @@
+﻿CONTEXT "Producten-VoorregistratieAanspraakelijkhedenPersonen" IN DUTCH
+INCLUDE "Producten-VoorRegistratieSysteem.adl"
+--INCLUDE "Producten-VoorregistratieAanspraakelijkhedenPersonen.xlsx"
+
+-- Relaties verplaatst naar Producten-VoorRegistratieSysteem.adl, omdat dat de gezamenlijke bron lijkt.
+
+ENDCONTEXT

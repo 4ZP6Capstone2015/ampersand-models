@@ -1,17 +1,31 @@
 ﻿CONTEXT "SIAM_Testing" IN ENGLISH
 {- This is a stand-alone context used for demonstrating and testing Sessions, Identity and Access Management.
+ * 
+ * To ENABLE the login functionality you have to turn this feature on via the localSettings.php file.
+ * For SIAM as stand-alone application this is already configured.
+ * 
 -}
 
-   INCLUDE "../SIAM/SIAM_Persona.ifc"
-   INCLUDE "../SIAM/SIAM_OrgReg.ifc"
-   INCLUDE "../SIAM/SIAM_PersonReg.ifc"
-   INCLUDE "../SIAM/SIAM_Accounts.ifc"
+   INCLUDE "../SIAM/SIAM_PersonReg.adl"
+   INCLUDE "../SIAM/SIAM_OrgReg.adl"
+-- INCLUDE "../SIAM/SIAM_Persona.adl"
+   INCLUDE "../SIAM/SIAM_Roles.adl"
+   INCLUDE "../SIAM/SIAM_GodAccount.adl"
+   INCLUDE "../SIAM/SIAM_LoginLogging.adl"
+   INCLUDE "../SIAM/SIAM_Login.adl"
 
--- INCLUDE "../SIAM/SIAM_LoginStub.adl"
+   INCLUDE "../SIAM/SIAM_PersonReg.ifc"
+   INCLUDE "../SIAM/SIAM_OrgReg.ifc"
+-- INCLUDE "../SIAM/SIAM_Persona.ifc"
+   INCLUDE "../SIAM/SIAM_Roles.ifc"
+   INCLUDE "../SIAM/SIAM_AccountManagement.ifc"
    INCLUDE "../SIAM/SIAM_Login.ifc"
-   INCLUDE "../SIAM/SIAM_AssistedLogin.ifc"
+   INCLUDE "../SIAM/SIAM_LoginWithAssistance.ifc"
 
 -- Ensure there is a default User that is automatically logged in. As an alternative, you may use an Excel file for this.
-INCLUDE "_SIAM_pop.xlsx" -- Initial, minimal set of people and accounts 
+INCLUDE "../SIAM/_SIAM_pop.xlsx" -- Initial, minimal set of people and accounts 
+
+-- Onderstaande VIEW vervangt vieze SESSION identifiers door de tekst 'My Session' (of iets anders)
+VIEW Sessions: SESSION('_SESSION'[SESSION];V;'My Session'[Message] \/ (I[SESSION]-'_SESSION');V;'Some other Session'[Message])
 
 ENDCONTEXT

@@ -1,22 +1,20 @@
 ﻿CONTEXT "Login" IN ENGLISH LATEX
 -----------------------------------------------------------
 
-INCLUDE "../SIAM/SIAM_Login.adl"
-
---[LOGIN interface]----------------------------------------
-
-INTERFACE "Login" (loginUserid, loginPassword, logoutRequest): '_SESSION'[SESSION] BOX <ROWSNL>
-   [ "Login": I-(sessionAccount;sessionAccount~) BOX <HCOLS>
-      [ "Userid"   : loginUserid
-      , "Password": loginPassword
+INTERFACE "Login" : '_SESSION'[SESSION] cRud BOX <ROWSNL>
+   [ "Login": I-(sessionAccount;sessionAccount~) cRud BOX <HCOLS>
+      [ "Userid"   : loginUserid cRUd
+      , "Password": loginPassword cRUd
       ]
    , "Logout": I /\ sessionAccount;sessionAccount~ BOX <ROWSNL>
-      [ "Logout": I BOX <HCOLS>
-         [ "Logout?": logoutRequest
---       , "Account": sessionAccount
-         , "User": sessionUser;I[Person]
-         , "From": sessionOrg
---       , "Session roles": sessionRoles
+      [ "Logout": I cRud BOX <HCOLS>
+         [ "Logout?": logoutRequest cRUd
+         , "UserID": sessionUserid cRud
+         , "Organization": sessionOrg cRud
+         , "Person": sessionPerson cRud
+--       , "Persona" : sessionPersona cRud
+--       , "Allowed roles": sessionAllowedRoles cRud
+--       , "Active roles": sessionActiveRoles cRud
          ]
       ]
    ]

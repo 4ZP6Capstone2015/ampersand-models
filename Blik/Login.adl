@@ -17,6 +17,7 @@ MEANING "Aan elk account kan een aantal rollen zijn toegekend"
 
 CONCEPT Role "Een eigenschap waarmee kan worden bepaald welke functionaliteit toegankelijk is."
 RULE 'SystemAdmin' |- I[Role]
+POPULATION Role CONTAINS [ "SystemAdmin" ]
 
 RELATION sessionLoginnaam[SESSION*Loginnaam] [UNI]
 MEANING "Het systeem onthoudt de loginnaam van elke lopende sessie, zolang die sessie leeft."
@@ -94,7 +95,7 @@ BOX [ loginnaam: accLogin
 
 -- a) een interface voor het beheren van je eigen account in de MENU bar.
 INTERFACE "Mijn account"
-    (accPassword, sessionPassword, accLogin):
+    (accPassword, sessionPassword, accLogin) FOR User:
     '_SESSION';ingelogd
 BOX [ "Login naam"  : accLogin
     , "Wachtwoord"  : accPassword

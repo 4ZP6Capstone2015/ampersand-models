@@ -1,0 +1,7 @@
+﻿CONTEXT "ProcVerloop" IN DUTCH
+
+INCLUDE "ProcVerloop.adl"
+
+
+
+ENDCONTEXT

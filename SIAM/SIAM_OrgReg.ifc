@@ -1,27 +1,20 @@
 ﻿CONTEXT "Organization Registration Interfaces" IN ENGLISH
 -----------------------------------------------------------
 
-INCLUDE "../SIAM/SIAM_OrgReg.adl"
-
------------------------------------------------------------
-
---[Organizations (minimalistic)]--
 VIEW Organizations: Organization(orgAbbrName)
 
-POPULATION Role CONTAINS [ "OrganizationMgr" ]
+POPULATION Role CONTAINS [ "Account manager" ]
 
-INTERFACE "New Organization" 
-   (orgAbbrName, orgFullName
-   ) FOR "OrganizationMgr" : I[Organization] Crud COLS
-   [ "Short name" : orgAbbrName
-   , "Full name"  : orgFullName
+INTERFACE "New/edit organization" FOR "Account manager" : I[Organization] CRuD COLS
+   [ "Organization" : I cRud
+   , "Short name"   : orgAbbrName cRUd
+   , "Full name"    : orgFullName cRUd
    ]
 
-INTERFACE "Update Organization" 
-   (orgAbbrName, orgFullName
-   ) FOR "OrganizationMgr" : I[Organization] cRUD COLS
-   [ "Short name" : orgAbbrName
-   , "Full name"  : orgFullName
+INTERFACE "Organizations" FOR "Account manager" : V[SESSION*Organization] cRud COLS
+   [ "Organization" : I cRud
+   , "Short name"   : orgAbbrName cRud
+   , "Full name"    : orgFullName cRud
    ]
 
 -----------------------------------------------------------

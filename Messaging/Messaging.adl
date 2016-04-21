@@ -12,21 +12,25 @@ Make sure that for testing and login, you check the following settings in `local
   Config::set('allowedRolesForRunFunction', 'ExecEngine', (etc.)
 -}
 
-   INCLUDE "../SIAM/SIAM_LoginStub.adl"  -- Definitions that are needed for stand-alone operation]
--- INCLUDE "../SIAM/SIAM_AssistedLogin.ifc"
--- INCLUDE "../SIAM/SIAM_Login.ifc"
--- INCLUDE "MSG_Test_Loginstuff.xlsx" -- Accounts and registrations that are needed by Login.
-   INCLUDE "MSG_Test.xlsx"   -- Population for testing
+   INCLUDE "../Messaging/MSG_ContactEndpoints.adl" 
+   INCLUDE "../Messaging/MSG_CEPValidation.adl"
+   INCLUDE "../Messaging/MSG_Transmission.adl"
+   INCLUDE "../Messaging/MSG_Pushover.adl"
+   INCLUDE "../Messaging/MSG_Pushalot.adl"
+   INCLUDE "../Messaging/MSG_Email.adl"
+-- INCLUDE "../Messaging/MSG_SMS.adl"
 
---[Testable/demonstratable scripts]--
-   INCLUDE "MSG_Pushover.adl"
-   INCLUDE "MSG_Pushalot.adl"
-   INCLUDE "MSG_Email.adl"
--- INCLUDE "MSG_SMS.adl"
-   INCLUDE "MSG_CEPvalidation.adl"
+   INCLUDE "../Messaging/MSG_Endpoints.ifc"
 
 --[Testing interface]--
-sessionMsgRecipient :: SESSION * Person [UNI]
+
+   INCLUDE "SIAM_Module.adl" -- Include Login, and simple person/org registrations
+   INCLUDE "SIAM_pop.xlsx"   -- Include some test accounts
+   INCLUDE "MSG_Test.xlsx"   -- Population for testing
+
+CLASSIFY Person ISA MsgEndpoint -- This allows us to send messages to a Person
+
+sessionMsgRecipient :: SESSION * MsgEndpoint [UNI]
 sessionMsg  :: SESSION * MsgSendReq [UNI]
 
 INTERFACE "Send Message" 
@@ -34,26 +38,26 @@ INTERFACE "Send Message"
    , msgSender, msgRecipient
    , msgMsgTitle, msgMsgText
    , msgURLTitle, msgURLText
-   ): '_SESSION'[SESSION]
-BOX[ "New message to (Person)" : sessionMsgRecipient
-   , "Message details" : sessionMsg;(I-msgSendReq) COLS
-     [ "Recipient": msgRecipient
-     , "Title"    : msgMsgTitle
-     , "Message"  : msgMsgText
-     , "URLTitle" : msgURLTitle
-     , "URL"      : msgURLText
-     , "Send?"    : msgSendReq
-     , "SMS?"     : msgSMSReq
+   ): '_SESSION'[SESSION] cRud
+BOX[ "New message to (Person)" : sessionMsgRecipient cRUd
+   , "Message details" : sessionMsg;(I-msgSendReq) CRud COLS
+     [ "Recipient": msgRecipient cRUd
+     , "Title"    : msgMsgTitle cRUd
+     , "Message"  : msgMsgText cRUd
+     , "URLTitle" : msgURLTitle cRUd
+     , "URL"      : msgURLText cRUd
+     , "Send?"    : msgSendReq cRUd
+     , "SMS?"     : msgSMSReq cRUd
      ]
-   , "Messages" : V[SESSION*MsgSendReq] COLS
-     [ "Del?"     : msgDelReq
-     , "Recipient": msgSendReq;msgRecipient
-     , "Title"    : msgSendReq;msgMsgTitle
-     , "Message"  : msgSendReq;msgMsgText
-     , "Delivery" : trxMsgSR~ BOX <COLSNL>
-       [ "Means"    : trxCEPMeans
-       , "Address"  : trxCEP;cepAddress
-       , "Sent at"  : trxDateTime
+   , "Messages" : V[SESSION*MsgSendReq] cRUd COLS
+     [ "Del?"     : msgDelReq cRUd
+     , "Recipient": msgSendReq;msgRecipient cRud
+     , "Title"    : msgSendReq;msgMsgTitle cRud
+     , "Message"  : msgSendReq;msgMsgText cRud
+     , "Delivery" : trxMsgSR~ cRud BOX <COLSNL>
+       [ "Means"    : trxCEPMeans cRud
+       , "Address"  : trxCEP;cepAddress cRud
+       , "Sent at"  : trxDateTime cRud
        ]
      ]
    ]
@@ -63,8 +67,8 @@ ROLE ExecEngine MAINTAINS "Create new message"
 RULE "Create new message": '_SESSION';sessionMsgRecipient |- -V
 VIOLATION (TXT "{EX}_;NewStruct_;MsgSendReq"
               ,TXT "_;sessionMsg_;SESSION_;", SRC I, TXT "_;MsgSendReq_;_NEW"
-              ,TXT "_;msgRecipient_;MsgSendReq_;_NEW_;Person_;", TGT I
-          ,TXT "{EX} DelPair;sessionMsgRecipient;SESSION;", SRC I, TXT ";Person;", TGT I
+              ,TXT "_;msgRecipient_;MsgSendReq_;_NEW_;MsgEndpoint_;", TGT I
+          ,TXT "{EX} DelPair;sessionMsgRecipient;SESSION;", SRC I, TXT ";MsgEndpoint;", TGT I
           )
 
 msgDelReq :: MsgSendReq * MsgSendReq [PROP] -- Request the message to be deleted after sending.
@@ -86,28 +90,21 @@ RULE "SMS can only be sent to a people that have specified a phone number for SM
   msgSMSReq;msgRecipient |- V;'SMS';cepMeans~;cepConnectsTo
 
 --[Use a simple person registration]--
-INCLUDE "../SIAM/SIAM_PersonReg.adl"
 
-INTERFACE "People" 
-   (cepConnectsTo, cepMeans, cepAddress, cepNote
+INTERFACE "Me"
+   (personFirstName, personLastName
+   ,cepConnectsTo, cepMeans, cepAddress, cepNote
    ,cepAppUseProp, cvrResponse
-   ): V[SESSION*Person]  cRUD COLS
-   [ "Name" : I[Person] 
-   , "Ways of contacting" : I BOX <ROWSNL>
-     [ "validation" : cepConnectsTo~;cvrCEP~ BOX <COLSNL>
-       [ "view" : cvrCEP <ViewContact>
-       , "label" : V;'Enter validation code'[Message]
-       , "code" : cvrResponse
-       ]
-     , "applmeans" : cepConnectsTo~;(I-(cvrCEP~;cvrCEP) /\ cepMeans;cepmeansImplemented;cepMeans~) BOX <COLSNL>
-       [ "view" : I <ViewContact>
-       , "checkbox" : cepAppUseProp
-       ]
-     , "nonapplmeans" : cepConnectsTo~;(I-(cepMeans;cepmeansImplemented;cepMeans~)) <ViewContact>
-     ]
+   ): '_SESSION';sessionPerson cRud BOX <ROWSNL>
+   [ "Who I am": I cRud COLS
+      [ "First name": personFirstName cRUd
+      , "Last name" : personLastName cRUd
+      , "Account (Userid)" : accPerson~;accUserid cRud
+      ]
+   , "Ways of contacting" : I cRud INTERFACE "MessageEndpoint" 
    ]
 
---[Rules for validation tsting]--
+--[Rules for validation testing]--
 
 ROLE ExecEngine MAINTAINS "Test - invalidating CEPs"
 RULE "Test - invalidating CEPs": cepAppIsValid |- cepAppUseProp

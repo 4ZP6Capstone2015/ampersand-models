@@ -1,27 +1,16 @@
 ﻿CONTEXT "Persona Interfaces" IN ENGLISH
 -----------------------------------------------------------
 
-INCLUDE "../SIAM/SIAM_Persona.adl"
-
------------------------------------------------------------
 VIEW Persona: Persona(pParty;orgAbbrName, TXT ":", pActor;personFirstName, TXT " ", pActor;personLastName)
 
-POPULATION Role CONTAINS [ "PersonaMgr" ]
+POPULATION Role CONTAINS [ "Account manager" ]
 
-INTERFACE "New Persona" 
-   (pActor, pParty, pRelation
-   ) FOR "PersonaMgr" : I[Persona] Crud COLS
-   [ "Party"    : pParty
-   , "Actor"    : pActor
-   , "Relation" : pRelation
-   ]
-
-INTERFACE "Update Persona" 
-   (pActor, pParty, pRelation
-   ) FOR "PersonaMgr" : I[Persona] cRUD COLS
-   [ "Party"    : pParty
-   , "Actor"    : pActor
-   , "Relation" : pRelation
+INTERFACE "Persona" FOR "Account manager" : I[Persona] CRuD COLS
+   [ "Persona"  : I cRud
+   , "Party"    : pParty cRUd
+   , "Actor"    : pActor cRUd
+   , "Relation" : pRelation cRUd
+   , "Account"  : accPersona~ cRUd
    ]
 
 -----------------------------------------------------------

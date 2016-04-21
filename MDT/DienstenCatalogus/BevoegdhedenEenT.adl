@@ -1,14 +1,14 @@
 ﻿CONTEXT BevoegdhedenEenT IN DUTCH
-INCLUDE "BevoegdhedenEenT.xlsx"
+--INCLUDE "BevoegdhedenEenT.xlsx"
 
 
---HJO: bij E&T wordt een Bevoegdheid gebruikt voor wat we wellicht beter dienst kunnen gaan noemen
-RELATION omschrijving[Bevoegdheid*BevoegdheidOmschrijving] [UNI]
-RELATION systeem[Bevoegdheid*Systeem][UNI]
-RELATION nodigVoor[ProcID*Bevoegdheid]
+--HJO: bij E&T wordt een Erkenning gebruikt voor wat we wellicht beter dienst kunnen gaan noemen
+RELATION omschrijving[Erkenning*ErkenningOmschrijving] [UNI]
+RELATION systeem[Erkenning*Systeem] [UNI]
+RELATION recht[Erkenning*ProcIdent]
 
-ROLE EenT MAINTAINS bevoegdheidOmschrijving
-RULE bevoegdheidOmschrijving : I[Bevoegdheid] |- omschrijving;omschrijving~
-MEANING "Elke bevoegdheid heeft een omschrijving"
+ROLE EenT MAINTAINS erkenningOmschrijving
+RULE erkenningOmschrijving : I[Erkenning] |- omschrijving;omschrijving~
+MEANING "Elke erkenning heeft een omschrijving"
 
 ENDCONTEXT
